@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bag — Wezar</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .page-title { padding: 96px 0 64px; }
+  .page-title .eyebrow { margin-bottom: 16px; }
+  .page-title h1 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(56px, 9vw, 120px); line-height: .95; letter-spacing: 0.08em;
+    margin: 0;
+  }
+
+  .empty-state {
+    padding: 96px 24px 192px; text-align: center;
+  }
+  .empty-state .diamond { color: var(--wz-champagne); margin-bottom: 28px; letter-spacing: 1em; }
+  .empty-state h2 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(36px, 5vw, 56px); line-height: 1.1; margin: 0 0 16px;
+  }
+  .empty-state p {
+    font-family: var(--wz-font-body); font-weight: 300; color: var(--wz-graphite);
+    font-size: 16px; max-width: 36ch; margin: 0 auto 40px;
+  }
+
+  .cart-grid {
+    display: grid; grid-template-columns: 1.6fr 1fr; gap: 80px;
+    padding-bottom: 160px; align-items: flex-start;
+  }
+  @media (max-width: 900px) { .cart-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+  .cart-item {
+    display: grid; grid-template-columns: 120px 1fr auto;
+    gap: 24px; padding: 28px 0; border-top: 1px solid var(--wz-mist);
+    align-items: flex-start; position: relative;
+    transition: opacity 320ms var(--wz-ease), transform 320ms var(--wz-ease);
+  }
+  .cart-item:last-child { border-bottom: 1px solid var(--wz-mist); }
+  .cart-item.removing { opacity: 0; transform: translateX(-12px); }
+  .cart-item .thumb {
+    width: 120px; height: 120px; position: relative; overflow: hidden;
+    background: var(--wz-pearl);
+  }
+  .cart-item .thumb.dark { background: var(--wz-charcoal); }
+  .cart-item .thumb.blush { background: var(--wz-blush); }
+  .cart-item .thumb.deep { background: var(--wz-pearl-deep); }
+  .cart-item .thumb .ph svg { width: 60%; }
+
+  .cart-item .name {
+    font-family: var(--wz-font-body); font-weight: 400; text-transform: uppercase;
+    font-size: 22px; margin: 0 0 6px;
+  }
+  .cart-item .meta {
+    font-family: var(--wz-font-body); font-size: 10px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--wz-stone); margin-bottom: 16px;
+  }
+  .cart-item .row-bottom { display: flex; align-items: center; gap: 20px; }
+  .qty-stepper {
+    display: inline-flex; align-items: center; border: 1px solid var(--wz-mist);
+  }
+  .qty-stepper button {
+    width: 32px; height: 32px; font-family: var(--wz-font-body); font-size: 13px;
+    color: var(--wz-onyx); transition: background 180ms var(--wz-ease);
+  }
+  .qty-stepper button:hover { background: var(--wz-pearl); }
+  .qty-stepper input {
+    width: 36px; height: 32px; border: none; background: transparent; text-align: center;
+    font-family: var(--wz-font-body); font-size: 13px; outline: none;
+  }
+  .cart-item .right {
+    text-align: right; display: flex; flex-direction: column; gap: 16px; align-items: flex-end;
+  }
+  .cart-item .price {
+    font-family: var(--wz-font-body); font-size: 16px; letter-spacing: .04em;
+  }
+  .cart-item .remove {
+    font-family: var(--wz-font-body); font-size: 18px; color: var(--wz-stone);
+    transition: color 180ms var(--wz-ease);
+  }
+  .cart-item .remove:hover { color: var(--wz-onyx); }
+
+  .summary {
+    position: sticky; top: 100px;
+    background: var(--wz-pearl); padding: 40px;
+  }
+  @media (max-width: 900px) { .summary { position: static; } }
+  .summary h3 {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--wz-onyx);
+    margin: 0 0 32px;
+  }
+  .summary .row {
+    display: flex; justify-content: space-between; padding: 12px 0;
+    font-family: var(--wz-font-body); font-size: 14px; color: var(--wz-graphite);
+  }
+  .summary .row .label {
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--wz-stone); font-weight: 500;
+  }
+  .summary .row.total {
+    margin-top: 16px; padding-top: 20px; border-top: 1px solid var(--wz-mist);
+    font-family: var(--wz-font-body); text-transform: uppercase; font-size: 24px; color: var(--wz-onyx);
+  }
+  .summary .row.total .label {
+    font-family: var(--wz-font-body); font-size: 11px; letter-spacing: .22em; color: var(--wz-onyx); text-transform: uppercase;
+  }
+  .summary .checkout { margin-top: 32px; }
+  .summary .pay-later {
+    margin-top: 16px; text-align: center;
+    font-family: var(--wz-font-body); text-transform: uppercase; font-size: 13px; color: var(--wz-stone);
+  }
+</style>
+</head>
+<body data-screen-label="05 Cart">
+
+<div id="site-header"></div>
+
+<div class="container">
+  <section class="page-title">
+    <div class="eyebrow" id="count-eb">— 0 pieces</div>
+    <h1>The <em>Bag</em>.</h1>
+  </section>
+
+  <div id="cart-content"></div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script>
+  injectChrome('cart');
+
+  function render() {
+    const items = cart.read().map(i => ({ ...i, p: PRODUCTS.find(x => x.id === i.id) })).filter(i => i.p);
+    const count = items.reduce((s,i) => s + i.qty, 0);
+    document.getElementById('count-eb').textContent = `— ${count} ${count === 1 ? 'piece' : 'pieces'}`;
+
+    const root = document.getElementById('cart-content');
+    if (!items.length) {
+      root.innerHTML = `
+        <div class="empty-state">
+          <div class="diamond">◆</div>
+          <h2><em>Your bag is patient.</em></h2>
+          <p>Add something worth carrying.</p>
+          <a href="shop.html" class="btn btn-primary">Discover the edit</a>
+        </div>`;
+      return;
+    }
+
+    const subtotal = items.reduce((s,i) => s + i.p.price * i.qty, 0);
+    root.innerHTML = `
+      <div class="cart-grid">
+        <div>
+          ${items.map(i => itemRow(i)).join('')}
+        </div>
+        <aside class="summary">
+          <h3>Summary</h3>
+          <div class="row"><span class="label">Subtotal</span><span>${fmtPrice(subtotal)}</span></div>
+          <div class="row"><span class="label">Shipping</span><span style="letter-spacing:.18em;font-size:11px;text-transform:uppercase;font-weight:500;">Free</span></div>
+          <div class="row total"><span class="label">Total</span><span>${fmtPrice(subtotal)}</span></div>
+          <a href="checkout.html" class="btn btn-primary btn-block btn-large checkout">Checkout</a>
+          <div class="pay-later">Or pay later — interest free.</div>
+        </aside>
+      </div>`;
+
+    // wire item interactions
+    items.forEach(i => {
+      const row = document.querySelector(`[data-row="${i.id}"]`);
+      row.querySelector('.qty-minus').addEventListener('click', () => {
+        cart.update(i.id, Math.max(1, i.qty - 1));
+        render();
+      });
+      row.querySelector('.qty-plus').addEventListener('click', () => {
+        cart.update(i.id, i.qty + 1);
+        render();
+      });
+      row.querySelector('.remove').addEventListener('click', () => {
+        row.classList.add('removing');
+        setTimeout(() => { cart.remove(i.id); render(); }, 320);
+      });
+    });
+  }
+
+  function itemRow(i) {
+    const p = i.p;
+    const tone = p.tone || 'pearl';
+    const toneClass = tone === 'dark' ? 'dark' : tone === 'blush' ? 'blush' : tone === 'deep' ? 'deep' : '';
+    return `
+    <div class="cart-item" data-row="${p.id}">
+      <a href="product.html?id=${p.id}" class="thumb ${toneClass}">
+        <div class="ph">${productArt(p)}</div>
+      </a>
+      <div>
+        <a href="product.html?id=${p.id}" class="name">${p.name}</a>
+        <div class="meta">${p.meta}</div>
+        <div class="row-bottom">
+          <div class="qty-stepper">
+            <button class="qty-minus">—</button>
+            <input value="${i.qty}" readonly>
+            <button class="qty-plus">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="price">${fmtPrice(p.price * i.qty)}</div>
+        <button class="remove" aria-label="Remove">×</button>
+      </div>
+    </div>`;
+  }
+  render();
+</script>
+</body>
+</html>

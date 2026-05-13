@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" fill="none">
+  
+  <g stroke="#0A0A0A" stroke-width="3.5" stroke-linejoin="round" fill="none">
+    <path d="M180 70 L240 30 L300 70 L240 150 Z"></path>
+    <path d="M180 70 L300 70"></path>
+    <path d="M180 70 L210 50 L240 70 L240 30"></path>
+    <path d="M300 70 L270 50 L240 70"></path>
+    <path d="M210 50 L240 150"></path>
+    <path d="M270 50 L240 150"></path>
+  </g>
+  
+  <text x="240" y="230" text-anchor="middle" font-family="&#39;Cormorant Garamond&#39;, &#39;Times New Roman&#39;, serif" font-weight="500" font-size="86" letter-spacing="14" fill="#0A0A0A">WEZAR</text>
+  
+  <text x="240" y="278" text-anchor="middle" font-family="Jost, sans-serif" font-weight="300" font-size="22" letter-spacing="9" fill="#8A8A8A">access</text>
+</svg>

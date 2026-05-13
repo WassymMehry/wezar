@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop — Wezar</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .page-title-block { padding: 96px 0 48px; }
+  .page-title-block .eyebrow { margin-bottom: 16px; }
+  .page-title-block h1 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(56px, 9vw, 120px); line-height: .95; letter-spacing: 0.08em;
+    margin: 0;
+  }
+
+  .filter-bar {
+    position: sticky; top: 73px; z-index: 50;
+    background: var(--wz-bg); border-top: 1px solid var(--wz-mist); border-bottom: 1px solid var(--wz-mist);
+    padding: 18px 0;
+  }
+  .filter-bar .inner {
+    display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .filter-chips { display: flex; gap: 28px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--wz-stone);
+    padding: 6px 0; position: relative; transition: color 180ms var(--wz-ease);
+  }
+  .chip::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: var(--wz-onyx); transform: scaleX(0); transform-origin: center;
+    transition: transform 320ms var(--wz-ease);
+  }
+  .chip:hover { color: var(--wz-onyx); }
+  .chip.active { color: var(--wz-onyx); }
+  .chip.active::after { transform: scaleX(1); }
+
+  .sort-wrap { position: relative; }
+  .sort-trigger {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--wz-onyx);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sort-trigger .chev { transition: transform 320ms var(--wz-ease); }
+  .sort-wrap.open .sort-trigger .chev { transform: rotate(180deg); }
+  .sort-panel {
+    position: absolute; right: 0; top: calc(100% + 14px);
+    background: var(--wz-bg); border: 1px solid var(--wz-mist);
+    box-shadow: 0 24px 48px -12px rgba(10,10,10,.18);
+    min-width: 240px; opacity: 0; transform: translateY(-8px);
+    pointer-events: none; transition: opacity 180ms var(--wz-ease), transform 180ms var(--wz-ease);
+    z-index: 60;
+  }
+  .sort-wrap.open .sort-panel { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .sort-panel button {
+    display: block; width: 100%; text-align: left;
+    padding: 14px 20px; font-family: var(--wz-font-body); font-size: 12px; font-weight: 400;
+    letter-spacing: .04em; color: var(--wz-onyx);
+    transition: background 180ms var(--wz-ease);
+  }
+  .sort-panel button:hover { background: var(--wz-pearl); }
+  .sort-panel button.active { color: var(--wz-champagne-deep); }
+  .sort-panel button.active::before { content: '◆ '; font-size: 8px; }
+
+  .grid-section { padding: 64px 0 160px; }
+  .empty {
+    padding: 96px 24px; text-align: center; font-family: var(--wz-font-body); text-transform: uppercase; color: var(--wz-stone); font-size: 22px;
+  }
+</style>
+</head>
+<body data-screen-label="02 Shop">
+
+<div id="site-header"></div>
+
+<section class="page-title-block">
+  <div class="container">
+    <div class="eyebrow"><span id="count-eb">— 16 pieces</span></div>
+    <h1>The <em>Edit</em>.</h1>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <div class="container inner">
+    <div class="filter-chips" id="chips">
+      <button class="chip active" data-cat="all">All</button>
+      <button class="chip" data-cat="rings">Rings</button>
+      <button class="chip" data-cat="earrings">Earrings</button>
+      <button class="chip" data-cat="necklaces">Necklaces</button>
+      <button class="chip" data-cat="bracelets">Bracelets</button>
+    </div>
+    <div class="sort-wrap" id="sort">
+      <button class="sort-trigger" id="sort-trig">
+        <span>Sort: <span id="sort-label">Newest</span></span>
+        <span class="chev">⌄</span>
+      </button>
+      <div class="sort-panel">
+        <button data-sort="newest" class="active">Newest</button>
+        <button data-sort="price-asc">Price: low to high</button>
+        <button data-sort="price-desc">Price: high to low</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="grid-section">
+  <div class="container">
+    <div class="product-grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none;">No pieces yet — try another category.</div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script>
+  injectChrome('shop');
+
+  let activeCat = getQuery('category') || 'all';
+  let activeSort = 'newest';
+  const sortLabels = { 'newest':'Newest', 'price-asc':'Price: low to high', 'price-desc':'Price: high to low' };
+
+  // Activate chip from URL
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.cat === activeCat);
+    c.addEventListener('click', () => {
+      activeCat = c.dataset.cat;
+      document.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === c));
+      updateURL();
+      render();
+    });
+  });
+
+  // Sort dropdown
+  const sortWrap = document.getElementById('sort');
+  document.getElementById('sort-trig').addEventListener('click', (e) => {
+    e.stopPropagation();
+    sortWrap.classList.toggle('open');
+  });
+  document.addEventListener('click', () => sortWrap.classList.remove('open'));
+  document.querySelectorAll('.sort-panel button').forEach(b => {
+    b.addEventListener('click', () => {
+      activeSort = b.dataset.sort;
+      document.querySelectorAll('.sort-panel button').forEach(x => x.classList.toggle('active', x === b));
+      document.getElementById('sort-label').textContent = sortLabels[activeSort];
+      sortWrap.classList.remove('open');
+      render();
+    });
+  });
+
+  function updateURL() {
+    const u = new URL(location.href);
+    if (activeCat === 'all') u.searchParams.delete('category');
+    else u.searchParams.set('category', activeCat);
+    history.replaceState(null, '', u.toString());
+  }
+
+  function render() {
+    let list = PRODUCTS.slice();
+    // collection filter (from URL only)
+    const col = getQuery('collection');
+    if (col) list = list.filter(p => p.collection === col);
+    if (activeCat !== 'all') list = list.filter(p => p.category === activeCat);
+
+    if (activeSort === 'price-asc') list.sort((a,b) => a.price - b.price);
+    else if (activeSort === 'price-desc') list.sort((a,b) => b.price - a.price);
+    // newest = original order (newest first by data ordering)
+
+    document.getElementById('count-eb').textContent = `— ${list.length} ${list.length===1?'piece':'pieces'}`;
+    document.getElementById('grid').innerHTML = list.map(p => productCard(p)).join('');
+    document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+  }
+  render();
+</script>
+</body>
+</html>

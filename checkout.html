@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout — Wezar</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .mini-nav {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; padding: 22px 32px;
+    border-bottom: 1px solid var(--wz-mist); background: var(--wz-bg);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .mini-nav .back {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--wz-onyx);
+    transition: color 180ms var(--wz-ease);
+  }
+  .mini-nav .back:hover { color: var(--wz-champagne-deep); }
+  .mini-nav .brand {
+    font-family: var(--wz-font-body); font-weight: 500; letter-spacing: .32em;
+    font-size: 18px; text-align: center;
+  }
+  .mini-nav .right {
+    text-align: right; font-family: var(--wz-font-body); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--wz-stone);
+  }
+
+  .checkout-grid {
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 96px;
+    padding: 80px 0 96px; align-items: flex-start;
+  }
+  @media (max-width: 900px) { .checkout-grid { grid-template-columns: 1fr; gap: 48px; padding: 48px 0; } }
+
+  .form-section { margin-bottom: 64px; }
+  .form-section h2 {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--wz-onyx);
+    margin: 0 0 28px;
+  }
+  .form-section h2 .num {
+    color: var(--wz-champagne-deep); margin-right: 12px; font-family: var(--wz-font-mono);
+  }
+  .form-fields { display: flex; flex-direction: column; gap: 22px; }
+  .check-row {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--wz-font-body); font-size: 14px; color: var(--wz-graphite);
+  }
+  .check-row input[type=checkbox] {
+    appearance: none; width: 16px; height: 16px; border: 1px solid var(--wz-mist);
+    background: transparent; cursor: pointer; position: relative;
+    transition: all 180ms var(--wz-ease);
+  }
+  .check-row input[type=checkbox]:checked {
+    background: var(--wz-onyx); border-color: var(--wz-onyx);
+  }
+  .check-row input[type=checkbox]:checked::after {
+    content: '✓'; position: absolute; top: -2px; left: 2px;
+    color: var(--wz-pearl); font-size: 12px;
+  }
+  select.input-boxed {
+    appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='%238A8A8A' stroke-width='1' d='M6 9l6 6 6-6'/></svg>");
+    background-repeat: no-repeat; background-position: right 16px center; background-size: 16px;
+    padding-right: 44px;
+  }
+
+  .order-summary {
+    position: sticky; top: 100px;
+    background: var(--wz-pearl); padding: 40px;
+  }
+  @media (max-width: 900px) { .order-summary { position: static; } }
+  .order-summary h3 {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--wz-onyx);
+    margin: 0 0 28px;
+  }
+  .order-line {
+    display: grid; grid-template-columns: 56px 1fr auto; gap: 16px;
+    align-items: center; padding: 12px 0;
+  }
+  .order-line .thumb {
+    width: 56px; height: 56px; position: relative; overflow: hidden; background: var(--wz-bg);
+  }
+  .order-line .thumb.dark { background: var(--wz-charcoal); }
+  .order-line .thumb.blush { background: var(--wz-blush); }
+  .order-line .thumb.deep { background: var(--wz-pearl-deep); }
+  .order-line .thumb .ph svg { width: 60%; }
+  .order-line .info { font-family: var(--wz-font-body); }
+  .order-line .info .n { font-family: var(--wz-font-body); text-transform: uppercase; font-size: 16px; }
+  .order-line .info .m { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--wz-stone); }
+  .order-line .price { font-family: var(--wz-font-body); font-size: 13px; }
+
+  .summary-divider { border-top: 1px solid var(--wz-mist); margin: 16px 0 0; }
+  .summary-row {
+    display: flex; justify-content: space-between; padding: 10px 0;
+    font-family: var(--wz-font-body); font-size: 13px; color: var(--wz-graphite);
+  }
+  .summary-row .lab { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--wz-stone); font-weight: 500; }
+  .summary-row.total {
+    margin-top: 12px; padding-top: 16px; border-top: 1px solid var(--wz-mist);
+    font-family: var(--wz-font-body); text-transform: uppercase; font-size: 22px; color: var(--wz-onyx);
+  }
+  .summary-row.total .lab {
+    font-family: var(--wz-font-body); font-style: normal; font-size: 11px; letter-spacing: .22em;
+    color: var(--wz-onyx);
+  }
+  .place-btn { margin-top: 24px; }
+  .terms {
+    margin-top: 16px; text-align: center;
+    font-family: var(--wz-font-body); font-size: 11px; color: var(--wz-stone); letter-spacing: .04em; line-height: 1.6;
+  }
+  .terms a { border-bottom: 1px solid var(--wz-mist); }
+
+  .processing {
+    position: fixed; inset: 0; background: rgba(244, 239, 232, .92);
+    display: none; align-items: center; justify-content: center; z-index: 2000;
+    font-family: var(--wz-font-body); text-transform: uppercase; font-size: 28px; color: var(--wz-onyx);
+  }
+  .processing.show { display: flex; }
+</style>
+</head>
+<body data-screen-label="06 Checkout">
+
+<nav class="mini-nav">
+  <a href="cart.html" class="back">← Back to bag</a>
+  <a href="index.html" class="brand">WEZAR</a>
+  <div class="right">Secure checkout ⌕</div>
+</nav>
+
+<div class="container">
+  <div class="checkout-grid">
+    <form id="checkout-form" onsubmit="return false">
+
+      <div class="form-section">
+        <h2><span class="num">01</span> Contact</h2>
+        <div class="form-fields">
+          <label class="field"><span>Email</span>
+            <input type="email" class="input-line" placeholder="you@elsewhere.com" required>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" checked> <span>Send me Wezar's weekly edit.</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2><span class="num">02</span> Shipping</h2>
+        <div class="form-fields">
+          <label class="field"><span>Full name</span>
+            <input type="text" class="input-line" placeholder="Marguerite Laurent" required>
+          </label>
+          <label class="field"><span>Address line 1</span>
+            <input type="text" class="input-line" placeholder="22 rue de la Paix" required>
+          </label>
+          <label class="field"><span>Address line 2 — optional</span>
+            <input type="text" class="input-line" placeholder="Apartment, suite, etc.">
+          </label>
+          <div class="field-row">
+            <label class="field"><span>City</span>
+              <input type="text" class="input-line" placeholder="Paris" required>
+            </label>
+            <label class="field"><span>Postal code</span>
+              <input type="text" class="input-line" placeholder="75002" required>
+            </label>
+          </div>
+          <label class="field"><span>Country</span>
+            <select class="input-boxed" required>
+              <option>France</option>
+              <option>United Kingdom</option>
+              <option>United States</option>
+              <option>Germany</option>
+              <option>Italy</option>
+              <option>Spain</option>
+              <option>Netherlands</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2><span class="num">03</span> Payment</h2>
+        <div class="form-fields">
+          <label class="field"><span>Card number</span>
+            <input type="text" class="input-boxed" placeholder="1234 5678 9012 3456" required>
+          </label>
+          <div class="field-row">
+            <label class="field"><span>Expiry (MM/YY)</span>
+              <input type="text" class="input-boxed" placeholder="03 / 28" required>
+            </label>
+            <label class="field"><span>CVC</span>
+              <input type="text" class="input-boxed" placeholder="•••" required>
+            </label>
+          </div>
+          <label class="field"><span>Cardholder name</span>
+            <input type="text" class="input-boxed" placeholder="As it appears on card" required>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <aside class="order-summary">
+      <h3>Order</h3>
+      <div id="order-lines"></div>
+      <div class="summary-divider"></div>
+      <div id="order-totals"></div>
+      <button class="btn btn-primary btn-block btn-large place-btn" id="place-order">Place order</button>
+      <div class="terms">By placing this order, you agree to our <a>Terms</a> and <a>Privacy</a>.</div>
+    </aside>
+  </div>
+</div>
+
+<div class="footer-mini">
+  <span>© 2026 Wezar</span> <a>Terms</a> <a>Privacy</a> <a>Contact</a>
+</div>
+
+<div class="processing" id="processing">Preparing your order…</div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script>
+  // No header/footer; this is the focused checkout chrome.
+  const items = cart.read().map(i => ({ ...i, p: PRODUCTS.find(x => x.id === i.id) })).filter(i => i.p);
+
+  // If cart empty, redirect to shop
+  if (!items.length) {
+    location.href = 'shop.html';
+  }
+
+  document.getElementById('order-lines').innerHTML = items.map(i => {
+    const tone = i.p.tone || 'pearl';
+    const toneClass = tone === 'dark' ? 'dark' : tone === 'blush' ? 'blush' : tone === 'deep' ? 'deep' : '';
+    return `
+    <div class="order-line">
+      <div class="thumb ${toneClass}"><div class="ph">${productArt(i.p)}</div></div>
+      <div class="info">
+        <div class="n">${i.p.name}</div>
+        <div class="m">${i.qty} × ${fmtPrice(i.p.price)}</div>
+      </div>
+      <div class="price">${fmtPrice(i.p.price * i.qty)}</div>
+    </div>`;
+  }).join('');
+
+  const subtotal = items.reduce((s,i) => s + i.p.price * i.qty, 0);
+  document.getElementById('order-totals').innerHTML = `
+    <div class="summary-row"><span class="lab">Subtotal</span><span>${fmtPrice(subtotal)}</span></div>
+    <div class="summary-row"><span class="lab">Shipping</span><span style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;">Free</span></div>
+    <div class="summary-row total"><span class="lab">Total</span><span>${fmtPrice(subtotal)}</span></div>
+  `;
+
+  document.getElementById('place-order').addEventListener('click', () => {
+    document.getElementById('processing').classList.add('show');
+    setTimeout(() => {
+      const orderNum = 'W-' + Math.floor(100000 + Math.random() * 900000);
+      // snapshot the items to URL so thank-you can render them
+      const snapshot = items.map(i => `${i.id}:${i.qty}`).join(',');
+      cart.clear();
+      location.href = `thank-you.html?order=${orderNum}&items=${encodeURIComponent(snapshot)}`;
+    }, 600);
+  });
+</script>
+</body>
+</html>

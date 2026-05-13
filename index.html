@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wezar — Access to brilliance.</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding: 0 0 148px; position: relative; overflow: hidden;
+    background: var(--wz-rose);
+  }
+  .hero-img-wrap {
+    position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  }
+  .hero-img {
+    width: 100%; height: 115%;
+    object-fit: cover; object-position: center 15%;
+    will-change: transform;
+  }
+  .hero-wordmark {
+    position: absolute; z-index: 1;
+    top: 50%; transform: translateY(-50%);
+    font-family: var(--wz-font-display); font-weight: 300;
+    font-size: clamp(96px, 15vw, 220px);
+    letter-spacing: -0.01em; text-transform: uppercase;
+    color: rgba(168, 85, 99, 0.28); line-height: 1;
+    pointer-events: none; will-change: transform, opacity;
+    user-select: none;
+  }
+  .hero-wordmark-left  { left: -0.04em; }
+  .hero-wordmark-right { right: -0.04em; }
+  .hero-veil {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(
+      175deg,
+      rgba(10,10,10,0.04) 0%,
+      transparent 28%,
+      transparent 50%,
+      rgba(10,10,10,0.38) 72%,
+      rgba(10,10,10,0.72) 100%
+    );
+  }
+  .hero-content {
+    position: relative; z-index: 3;
+    text-align: center; padding: 0 32px; max-width: 680px;
+  }
+  .hero .eyebrow { color: var(--wz-rose); margin-bottom: 18px; }
+  .hero h1 {
+    font-family: var(--wz-font-display); font-weight: 300;
+    font-size: clamp(40px, 6vw, 72px); line-height: 1.1; letter-spacing: 0.05em;
+    text-transform: uppercase; max-width: 18ch; margin: 0 auto 24px;
+    color: var(--wz-pearl);
+  }
+  .hero h1 .accent { color: var(--wz-rose); }
+  .hero p {
+    max-width: 48ch; margin: 0 auto 32px;
+    color: rgba(244, 239, 232, 0.72); font-family: var(--wz-font-body);
+    font-size: 15px; line-height: 1.6; font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .hero-marker {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    color: var(--wz-rose-soft); font-size: 11px; letter-spacing: .32em;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    font-family: var(--wz-font-body); font-weight: 500; z-index: 3;
+  }
+  .hero-marker .line {
+    width: 1px; height: 40px; background: var(--wz-rose-soft); opacity: .5;
+    transform-origin: top center;
+    animation: hero-line-pulse 2.4s ease-in-out infinite;
+    animation-delay: 2.2s;
+  }
+  @keyframes hero-line-pulse {
+    0%, 100% { transform: scaleY(1);   opacity: .5; }
+    50%       { transform: scaleY(.4); opacity: .9; }
+  }
+
+  /* ---------- SECTION ---------- */
+  .section { padding: 96px 0; }
+  .section-tight { padding: 80px 0; }
+  .section-head {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 24px;
+    margin-bottom: 48px; flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-family: var(--wz-font-body); font-weight: 300;
+    font-size: clamp(28px, 4vw, 48px); line-height: 1.1; letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 8px 0 0; color: var(--wz-onyx);
+  }
+  .section-head h2 .accent { color: var(--wz-rose-deeper); }
+  .section-link {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding-bottom: 4px; border-bottom: 1px solid var(--wz-onyx);
+    transition: all 320ms var(--wz-ease);
+  }
+  .section-link:hover { color: var(--wz-rose-deeper); border-color: var(--wz-rose-deeper); letter-spacing: .22em; }
+
+  /* ---------- COLLECTIONS STRIP ---------- */
+  .collections-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  @media (max-width: 800px) { .collections-strip { grid-template-columns: 1fr 1fr; gap: 16px; } }
+  .col-card { display: block; cursor: pointer; }
+  .col-card .img {
+    aspect-ratio: 3/4; position: relative; overflow: hidden; margin-bottom: 16px;
+    transition: filter 320ms var(--wz-ease);
+  }
+  .col-card .img.heirloom  { background: var(--wz-onyx); }
+  .col-card .img.everyday  { background: var(--wz-rose-soft); }
+  .col-card .img.editorial { background: var(--wz-rose); }
+  .col-card .img.personal  { background: var(--wz-rose-whisper); border: 1px solid var(--wz-rose-soft); }
+  .col-card:hover .img { filter: brightness(.96); }
+  .col-card .img::after {
+    content: ''; position: absolute; width: 64px; height: 64px; border-radius: 50%;
+    border: 1px solid var(--wz-rose-deeper); top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .col-card .img.heirloom::after { border-color: var(--wz-rose); }
+  .col-card .overlay {
+    position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 20px;
+    opacity: 0; transition: opacity 320ms var(--wz-ease);
+  }
+  .col-card:hover .overlay { opacity: 1; }
+  .col-card .overlay span {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--wz-rose-whisper);
+    background: rgba(10,10,10,.7); padding: 8px 14px;
+  }
+  .col-card .img.everyday .overlay span,
+  .col-card .img.editorial .overlay span,
+  .col-card .img.personal .overlay span {
+    color: var(--wz-onyx); background: rgba(252, 234, 237, .9);
+  }
+  .col-card .name {
+    font-family: var(--wz-font-body); font-weight: 400;
+    font-size: 14px; letter-spacing: .18em; text-transform: uppercase;
+    margin: 0 0 4px; color: var(--wz-onyx);
+  }
+  .col-card .tagline {
+    font-family: var(--wz-font-body); font-size: 12px; font-weight: 400;
+    letter-spacing: .04em; color: var(--wz-rose-deeper);
+  }
+
+  /* Decorative SVG inside collection tile */
+  .col-art { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+  /* ---------- EDITORIAL ROW ---------- */
+  .editorial-row { background: var(--wz-rose-soft); padding: 96px 0; }
+  .editorial-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+  @media (max-width: 800px) { .editorial-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .editorial-grid .img {
+    aspect-ratio: 4/5; background: var(--wz-rose); position: relative; overflow: hidden;
+  }
+  .editorial-grid .img::after {
+    content: ''; position: absolute; width: 80px; height: 80px; border-radius: 50%;
+    border: 1px solid var(--wz-rose-deeper); top: 50%; left: 50%; transform: translate(-50%,-50%);
+  }
+  .editorial-grid .eyebrow { margin-bottom: 12px; }
+  .editorial-grid h3 {
+    font-family: var(--wz-font-body); font-weight: 300;
+    font-size: clamp(28px, 3.5vw, 36px); line-height: 1.15; letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 0 0 24px; color: var(--wz-onyx);
+  }
+  .editorial-grid p {
+    font-size: 15px; line-height: 1.7; color: var(--wz-graphite); max-width: 44ch; margin: 0 0 28px;
+  }
+
+  /* ---------- CATEGORY TILES ---------- */
+  .category-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 800px) { .category-tiles { grid-template-columns: 1fr; } }
+  .cat-tile {
+    aspect-ratio: 16/12; position: relative; overflow: hidden; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    transition: filter 320ms var(--wz-ease);
+    background: var(--wz-rose-soft);
+  }
+  .cat-tile.rings { background: var(--wz-onyx); color: var(--wz-rose-whisper); }
+  .cat-tile.earrings { background: var(--wz-rose); color: var(--wz-onyx); }
+  .cat-tile.necklaces { background: var(--wz-rose-soft); color: var(--wz-onyx); }
+  .cat-tile:hover { filter: brightness(.96); }
+  .cat-tile .name {
+    font-family: var(--wz-font-body); font-weight: 300;
+    font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 0 0 14px; position: relative; z-index: 2;
+  }
+  .cat-tile .label {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase; position: relative; z-index: 2;
+  }
+  .cat-tile.rings .label { color: var(--wz-rose); }
+  .cat-tile.earrings .label, .cat-tile.necklaces .label { color: var(--wz-rose-deeper); }
+  .cat-tile-art {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    opacity: .25; pointer-events: none;
+  }
+  @media (max-width: 800px) {
+    .cat-tile { aspect-ratio: 4/5; }
+  }
+
+  /* ---------- NEWSLETTER ---------- */
+  .newsletter {
+    background: var(--wz-rose); padding: 128px 32px; text-align: center;
+  }
+  .newsletter .eyebrow { color: var(--wz-rose-deeper); margin-bottom: 12px; }
+  .newsletter h2 {
+    font-family: var(--wz-font-body); font-weight: 300;
+    font-size: clamp(28px, 4vw, 36px); line-height: 1.15; letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 12px 0 8px; color: var(--wz-onyx);
+  }
+  .newsletter h2 .accent { color: var(--wz-rose-deeper); }
+  .newsletter p {
+    font-family: var(--wz-font-body); font-weight: 300; font-size: 14px;
+    line-height: 1.6; color: var(--wz-graphite);
+    max-width: 42ch; margin: 0 auto 32px;
+  }
+  .newsletter form {
+    display: flex; max-width: 480px; margin: 0 auto;
+    border-bottom: 1px solid var(--wz-onyx); padding-bottom: 6px;
+  }
+  .newsletter input {
+    flex: 1; border: none; background: transparent;
+    font-family: var(--wz-font-body); font-size: 15px;
+    outline: none; padding: 8px 0; color: var(--wz-onyx);
+  }
+  .newsletter input::placeholder {
+    font-family: var(--wz-font-body); letter-spacing: .18em; text-transform: uppercase;
+    font-size: 12px; color: var(--wz-rose-deeper); opacity: .7;
+  }
+  .newsletter button {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; padding: 0 12px;
+    color: var(--wz-onyx); transition: color 180ms var(--wz-ease);
+  }
+  .newsletter button:hover { color: var(--wz-rose-deeper); }
+  .newsletter .msg {
+    margin-top: 18px; font-family: var(--wz-font-body); font-weight: 400;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--wz-rose-deeper); font-size: 11px; min-height: 18px;
+  }
+
+  /* ---------- EDITORIAL QUOTE (kept, restyled) ---------- */
+  .editorial-quote {
+    background: var(--wz-onyx); color: var(--wz-rose-whisper);
+    padding: 160px 32px; text-align: center; position: relative;
+  }
+  .editorial-quote .diamond {
+    color: var(--wz-rose); font-size: 14px; letter-spacing: 1em; margin-bottom: 32px;
+  }
+  .editorial-quote blockquote {
+    font-family: var(--wz-font-body); font-weight: 300;
+    font-size: clamp(28px, 4vw, 48px); line-height: 1.2; letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 0 auto 32px; max-width: 24ch;
+  }
+  .editorial-quote blockquote .accent { color: var(--wz-rose); }
+  .editorial-quote cite {
+    font-family: var(--wz-font-body); font-style: normal; font-weight: 500;
+    font-size: 11px; letter-spacing: .32em; text-transform: uppercase;
+    color: var(--wz-rose);
+  }
+</style>
+</head>
+<body data-screen-label="01 Home">
+
+<div id="site-header"></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero" data-screen-label="Hero">
+  <div class="hero-img-wrap">
+    <img class="hero-img" src="assets/hero.jpeg" alt="Wezar Spring 2026 Campaign">
+  </div>
+  <div class="hero-veil" aria-hidden="true"></div>
+  <div class="hero-content">
+    <h1>She <span class="accent">wears</span> the moment.</h1>
+    <p>Solid gold solitaires for women who refuse to wait for an occasion to feel like one.</p>
+    <div class="hero-actions">
+      <a href="shop.html" class="btn btn-secondary on-dark">Discover the edit</a>
+      <a href="#editorial" class="btn btn-ghost on-dark">Read our story</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURED COLLECTIONS ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">— Four Worlds</div>
+        <h2>Collections.</h2>
+      </div>
+      <a href="collections.html" class="section-link">View all →</a>
+    </div>
+    <div class="collections-strip" id="collections-strip"></div>
+  </div>
+</section>
+
+<!-- ============ NEW IN ============ -->
+<section class="section-tight" style="padding-bottom:128px;">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">— The Edit / Spring</div>
+        <h2>New <span class="accent">in</span>.</h2>
+      </div>
+      <a href="shop.html" class="section-link">Shop the edit →</a>
+    </div>
+    <div class="product-grid" id="new-grid"></div>
+  </div>
+</section>
+
+<!-- ============ EDITORIAL STORY ============ -->
+<section class="editorial-row" id="editorial" data-screen-label="Editorial">
+  <div class="container">
+    <div class="editorial-grid">
+      <div class="img"></div>
+      <div>
+        <div class="eyebrow">— The Story</div>
+        <h3>Heirloom-grade.<br>Worn casually on Tuesdays.</h3>
+        <p>We design for the long game. Solid gold. Real stones. No plating, no shortcuts. Every piece is built to be passed down — from her, to her, to her.</p>
+        <a class="btn btn-ghost">Read the story</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDITORIAL QUOTE ============ -->
+<section class="editorial-quote" data-screen-label="Quote">
+  <div class="diamond">◆</div>
+  <blockquote>She doesn&rsquo;t wait for the moment. She <span class="accent">is</span> the moment.</blockquote>
+  <cite>— The Wezar Code</cite>
+</section>
+
+<!-- ============ CATEGORY TILES ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">— Browse by piece</div>
+        <h2>Find <span class="accent">your</span> shape.</h2>
+      </div>
+    </div>
+    <div class="category-tiles">
+      <a href="shop.html?category=rings" class="cat-tile rings">
+        <div class="cat-tile-art">
+          <svg viewBox="0 0 200 200" width="55%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="115" r="58" fill="none" stroke="#F0A4B1" stroke-width="1.2"/>
+            <circle cx="100" cy="60" r="9" fill="none" stroke="#F0A4B1" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="name">Rings</div>
+        <div class="label">Shop rings →</div>
+      </a>
+      <a href="shop.html?category=earrings" class="cat-tile earrings">
+        <div class="cat-tile-art">
+          <svg viewBox="0 0 200 200" width="55%" xmlns="http://www.w3.org/2000/svg">
+            <path d="M70 50 Q90 100 70 150" fill="none" stroke="#A85563" stroke-width="1.2"/>
+            <path d="M130 50 Q110 100 130 150" fill="none" stroke="#A85563" stroke-width="1.2"/>
+            <circle cx="70" cy="150" r="6" fill="none" stroke="#A85563" stroke-width="1"/>
+            <circle cx="130" cy="150" r="6" fill="none" stroke="#A85563" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="name">Earrings</div>
+        <div class="label">Shop earrings →</div>
+      </a>
+      <a href="shop.html?category=necklaces" class="cat-tile necklaces">
+        <div class="cat-tile-art">
+          <svg viewBox="0 0 200 200" width="60%" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 50 Q100 170 170 50" fill="none" stroke="#A85563" stroke-width="1.2"/>
+            <path d="M95 142 l5 10 l5 -10 l-5 -8 z" fill="none" stroke="#A85563" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="name">Necklaces</div>
+        <div class="label">Shop necklaces →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWSLETTER ============ -->
+<section class="newsletter" data-screen-label="Newsletter">
+  <div class="eyebrow">— The Edit, Weekly</div>
+  <h2>First look. <span class="accent">No noise.</span></h2>
+  <p>New pieces, before the rest of the world. One quiet email a week.</p>
+  <form id="nl" onsubmit="event.preventDefault(); document.getElementById('nl-msg').textContent='Welcome.'; this.querySelector('input').value=''">
+    <input type="email" placeholder="you@elsewhere.com" required>
+    <button type="submit">Subscribe →</button>
+  </form>
+  <div class="msg" id="nl-msg"></div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script type="module">
+  import { animate, scroll } from "https://esm.sh/framer-motion@latest/dom";
+
+  const ease = [0.22, 0.61, 0.36, 1]; // Wezar signature ease
+
+  // ── Entrance sequence ──────────────────────────────────────────
+  // 1. Full-bleed image: subtle scale-in + fade
+  animate('.hero-img', { scale: [1.05, 1], opacity: [0, 1] },
+    { duration: 1.8, easing: ease });
+
+  // 2. WE / ZAR watermarks: slide in from opposite edges
+  animate('.hero-wordmark-left',  { x: [-80, 0], opacity: [0, 1] },
+    { duration: 1.4, delay: 0.18, easing: ease });
+  animate('.hero-wordmark-right', { x: [80,  0], opacity: [0, 1] },
+    { duration: 1.4, delay: 0.18, easing: ease });
+
+  // 3. Eyebrow label
+  animate('.hero .eyebrow', { y: [28, 0], opacity: [0, 1] },
+    { duration: 0.9, delay: 0.55, easing: 'ease-out' });
+
+  // 4. Headline
+  animate('.hero h1', { y: [36, 0], opacity: [0, 1] },
+    { duration: 1.0, delay: 0.72, easing: ease });
+
+  // 5. Subtext
+  animate('.hero p', { y: [22, 0], opacity: [0, 1] },
+    { duration: 0.85, delay: 0.92, easing: 'ease-out' });
+
+  // 6. CTAs — staggered
+  document.querySelectorAll('.hero-actions .btn').forEach((btn, i) => {
+    animate(btn, { y: [16, 0], opacity: [0, 1] },
+      { duration: 0.7, delay: 1.06 + i * 0.12, easing: 'ease-out' });
+  });
+
+  // 7. Scroll marker
+  animate('.hero-marker', { opacity: [0, 1] },
+    { duration: 0.8, delay: 1.42 });
+
+  // ── Scroll-driven ──────────────────────────────────────────────
+  // 8. Image parallax: drifts up as hero scrolls out of view
+  scroll(
+    animate('.hero-img', { y: ['0%', '-15%'] }),
+    { target: document.querySelector('.hero') }
+  );
+</script>
+<script>
+  injectChrome('home');
+
+  // Render featured collections (all four)
+  const colArtMap = {
+    heirloom:  '<svg viewBox="0 0 200 240" width="50%" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="140" r="48" fill="none" stroke="#F0A4B1" stroke-width="1"/><circle cx="100" cy="86" r="6" fill="#F0A4B1" fill-opacity=".5"/></svg>',
+    everyday:  '<svg viewBox="0 0 200 240" width="55%" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="130" rx="68" ry="20" fill="none" stroke="#A85563" stroke-width="1"/></svg>',
+    editorial: '<svg viewBox="0 0 200 240" width="55%" xmlns="http://www.w3.org/2000/svg"><path d="M50 60 Q100 200 150 60" fill="none" stroke="#A85563" stroke-width="1"/><path d="M95 175 l5 10 l5 -10 l-5 -8 z" fill="none" stroke="#A85563" stroke-width="1"/></svg>',
+    personal:  '<svg viewBox="0 0 200 240" width="50%" xmlns="http://www.w3.org/2000/svg"><rect x="68" y="100" width="64" height="64" rx="2" fill="none" stroke="#A85563" stroke-width="1"/><text x="100" y="142" text-anchor="middle" font-family="Jost" font-size="28" font-weight="300" fill="#A85563">W</text></svg>',
+  };
+  document.getElementById('collections-strip').innerHTML = COLLECTIONS.map(c => `
+    <a class="col-card" href="shop.html?collection=${c.slug}">
+      <div class="img ${c.slug}">
+        <div class="col-art">${colArtMap[c.slug]}</div>
+        <div class="overlay"><span>Explore →</span></div>
+      </div>
+      <div class="name">${c.name}</div>
+      <div class="tagline">${c.tagline}</div>
+    </a>
+  `).join('');
+
+  // Render new arrivals — products tagged 'New' first, then newest
+  const newProducts = [
+    ...PRODUCTS.filter(p => p.tag === 'New'),
+    ...PRODUCTS.filter(p => p.tag !== 'New')
+  ].slice(0, 4);
+  document.getElementById('new-grid').innerHTML = newProducts.map(p => productCard(p)).join('');
+</script>
+</body>
+</html>

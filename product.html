@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product — Wezar</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .breadcrumb {
+    font-family: var(--wz-font-body); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--wz-stone);
+    padding: 32px 0 0;
+  }
+  .breadcrumb a:hover { color: var(--wz-champagne-deep); }
+  .breadcrumb .sep { margin: 0 12px; color: var(--wz-mist); }
+
+  .pdp-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px;
+    padding: 32px 0 96px; align-items: flex-start;
+  }
+  @media (max-width: 900px) { .pdp-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  .gallery { display: flex; flex-direction: column; gap: 12px; }
+  .gallery .hero-img {
+    aspect-ratio: 4/5; position: relative; overflow: hidden; background: var(--wz-pearl);
+    transition: background 320ms var(--wz-ease);
+  }
+  .gallery .hero-img.dark { background: var(--wz-charcoal); }
+  .gallery .hero-img.blush { background: var(--wz-blush); }
+  .gallery .hero-img.deep { background: var(--wz-pearl-deep); }
+  .gallery .hero-img .ph svg { width: 45%; }
+  .thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .thumb {
+    aspect-ratio: 16/20; position: relative; overflow: hidden;
+    cursor: pointer; opacity: .7; transition: opacity 320ms var(--wz-ease);
+    border: 1px solid transparent;
+  }
+  .thumb.bone { background: var(--wz-bg); }
+  .thumb.pearl { background: var(--wz-pearl); }
+  .thumb.blush { background: var(--wz-blush); }
+  .thumb.deep { background: var(--wz-pearl-deep); }
+  .thumb.dark { background: var(--wz-charcoal); }
+  .thumb:hover { opacity: 1; }
+  .thumb.active { opacity: 1; border-color: var(--wz-onyx); }
+  .thumb .ph svg { width: 50%; }
+
+  .info { position: sticky; top: 100px; padding-top: 24px; }
+  @media (max-width: 900px) { .info { position: static; padding-top: 0; } }
+  .info .eyebrow { margin-bottom: 16px; }
+  .info h1 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(36px, 4.5vw, 56px); line-height: 1; letter-spacing: 0.08em;
+    margin: 0 0 16px;
+  }
+  .info .meta-line {
+    font-family: var(--wz-font-body); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--wz-stone); margin-bottom: 24px;
+  }
+  .info .price {
+    font-family: var(--wz-font-body); font-weight: 400; font-size: 22px;
+    letter-spacing: .04em; margin-bottom: 32px;
+  }
+  .info .desc {
+    font-family: var(--wz-font-body); font-weight: 300; font-size: 15px;
+    line-height: 1.7; color: var(--wz-graphite); max-width: 44ch; margin-bottom: 40px;
+  }
+
+  .qty-row { display: flex; align-items: center; gap: 24px; margin-bottom: 24px; }
+  .qty-label {
+    font-family: var(--wz-font-body); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--wz-stone);
+  }
+  .qty-stepper {
+    display: inline-flex; align-items: center; border: 1px solid var(--wz-mist);
+  }
+  .qty-stepper button {
+    width: 40px; height: 40px; font-family: var(--wz-font-body); font-size: 14px;
+    color: var(--wz-onyx); transition: background 180ms var(--wz-ease);
+  }
+  .qty-stepper button:hover { background: var(--wz-pearl); }
+  .qty-stepper input {
+    width: 48px; height: 40px; border: none; background: transparent; text-align: center;
+    font-family: var(--wz-font-body); font-size: 14px; outline: none; color: var(--wz-onyx);
+  }
+
+  .info .promise {
+    display: flex; gap: 16px; margin-top: 16px;
+    font-family: var(--wz-font-body); font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--wz-stone); justify-content: center;
+  }
+  .info .promise span:not(:last-child)::after {
+    content: '·'; margin-left: 16px; color: var(--wz-mist);
+  }
+
+  /* Accordion */
+  .accordion { padding: 64px 0 96px; max-width: 720px; }
+  .acc-item { border-top: 1px solid var(--wz-mist); }
+  .acc-item:last-child { border-bottom: 1px solid var(--wz-mist); }
+  .acc-trigger {
+    display: flex; justify-content: space-between; align-items: center; width: 100%;
+    padding: 28px 0;
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--wz-onyx);
+    cursor: pointer;
+  }
+  .acc-trigger .plus { font-size: 18px; transition: transform 320ms var(--wz-ease); font-weight: 300; }
+  .acc-item.open .acc-trigger .plus { transform: rotate(45deg); }
+  .acc-body {
+    max-height: 0; overflow: hidden; transition: max-height 560ms var(--wz-ease);
+  }
+  .acc-item.open .acc-body { max-height: 600px; }
+  .acc-body-inner {
+    padding-bottom: 32px; font-family: var(--wz-font-body); font-weight: 300;
+    font-size: 15px; line-height: 1.7; color: var(--wz-graphite);
+  }
+  .acc-body-inner ul { padding-left: 20px; margin: 0; }
+  .acc-body-inner li { margin-bottom: 8px; }
+
+  .related { padding: 96px 0 160px; border-top: 1px solid var(--wz-mist); }
+  .related h2 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(34px, 4vw, 48px); line-height: 1; margin: 0 0 48px;
+  }
+</style>
+</head>
+<body data-screen-label="04 Product">
+
+<div id="site-header"></div>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="shop.html">Shop</a><span class="sep">/</span>
+    <a id="bc-cat" href="#">Category</a><span class="sep">/</span>
+    <span id="bc-name">Product</span>
+  </div>
+
+  <div class="pdp-grid" id="pdp-grid"></div>
+
+  <div class="accordion" id="accordion"></div>
+</div>
+
+<section class="related">
+  <div class="container">
+    <h2>You may also <em>like</em>.</h2>
+    <div class="product-grid" id="related-grid"></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<div class="toast" id="toast">
+  <span>Added to your bag</span>
+  <a href="cart.html">View bag →</a>
+</div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script>
+  injectChrome('shop');
+
+  const id = getQuery('id') || 'p01';
+  const p = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
+
+  // Breadcrumb
+  document.getElementById('bc-cat').textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);
+  document.getElementById('bc-cat').href = `shop.html?category=${p.category}`;
+  document.getElementById('bc-name').textContent = p.name;
+  document.title = `${p.name} — Wezar`;
+
+  const tone = p.tone || 'pearl';
+  const heroToneClass = tone === 'dark' ? 'dark' : tone === 'blush' ? 'blush' : tone === 'deep' ? 'deep' : '';
+  const thumbTones = ['pearl','blush','deep','bone'];
+
+  // PDP layout
+  const desc = generateDesc(p);
+  document.getElementById('pdp-grid').innerHTML = `
+    <div class="gallery">
+      <div class="hero-img ${heroToneClass}" id="hero-img">
+        <div class="ph">${productArt(p)}</div>
+      </div>
+      <div class="thumbs" id="thumbs">
+        ${thumbTones.map((t, i) => `
+          <button class="thumb ${t} ${i===0?'active':''}" data-tone="${t}">
+            <div class="ph">${productArt(p)}</div>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+    <div class="info">
+      ${p.edition ? `<div class="eyebrow">— ${p.edition}</div>` : `<div class="eyebrow">— ${p.collection.charAt(0).toUpperCase()+p.collection.slice(1)} Collection</div>`}
+      <h1>${p.name}</h1>
+      <div class="meta-line">${p.meta}</div>
+      <div class="price">${fmtPrice(p.price)}</div>
+      <p class="desc">${desc.short}</p>
+      <div class="qty-row">
+        <div class="qty-label">Quantity</div>
+        <div class="qty-stepper">
+          <button id="qty-minus" aria-label="Decrease">—</button>
+          <input id="qty" type="text" value="1" readonly>
+          <button id="qty-plus" aria-label="Increase">+</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block btn-large" id="add-to-bag">Add to bag</button>
+      <div class="promise">
+        <span>Free shipping</span>
+        <span>Lifetime care</span>
+        <span>Returns within 30 days</span>
+      </div>
+    </div>
+  `;
+
+  // Thumbnail swap
+  document.querySelectorAll('.thumb').forEach(th => {
+    th.addEventListener('click', () => {
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      th.classList.add('active');
+      const hero = document.getElementById('hero-img');
+      hero.classList.remove('dark','blush','deep');
+      const t = th.dataset.tone;
+      if (t === 'blush') hero.classList.add('blush');
+      else if (t === 'deep') hero.classList.add('deep');
+      else if (t === 'bone') {} // bone = default pearl
+    });
+  });
+
+  // Qty
+  let qty = 1;
+  const qInput = document.getElementById('qty');
+  document.getElementById('qty-minus').addEventListener('click', () => { qty = Math.max(1, qty - 1); qInput.value = qty; });
+  document.getElementById('qty-plus').addEventListener('click',  () => { qty = qty + 1; qInput.value = qty; });
+
+  // Add to bag toast
+  document.getElementById('add-to-bag').addEventListener('click', () => {
+    cart.add(p.id, qty);
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(window._toastT);
+    window._toastT = setTimeout(() => t.classList.remove('show'), 3000);
+  });
+
+  // Accordion
+  document.getElementById('accordion').innerHTML = `
+    <div class="acc-item open">
+      <button class="acc-trigger"><span>The piece</span><span class="plus">+</span></button>
+      <div class="acc-body"><div class="acc-body-inner">
+        <p>${desc.long1}</p>
+        <p>${desc.long2}</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger"><span>Materials &amp; dimensions</span><span class="plus">+</span></button>
+      <div class="acc-body"><div class="acc-body-inner">
+        <ul>
+          <li>${p.meta}</li>
+          ${p.category === 'rings' ? '<li>Band width: 1.6mm</li><li>Available in sizes 4–9, half sizes on request</li>' : ''}
+          ${p.category === 'earrings' ? '<li>Drop: approx. 14mm</li><li>Post: 18k gold, hypoallergenic</li>' : ''}
+          ${p.category === 'necklaces' ? '<li>Chain length: 42cm + 5cm extender</li><li>Lobster clasp, hand-soldered</li>' : ''}
+          ${p.category === 'bracelets' ? '<li>Length: 16.5cm + 2cm extender</li><li>Lobster clasp, hand-finished</li>' : ''}
+          <li>Hand-finished in our Paris atelier</li>
+          <li>Conflict-free, traceable origin</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger"><span>Care</span><span class="plus">+</span></button>
+      <div class="acc-body"><div class="acc-body-inner">
+        <ul>
+          <li>Wear it. Daily. Solid gold ages beautifully — patina is part of the story.</li>
+          <li>Wipe with a soft cloth. Avoid chlorine, perfume, and hand sanitiser at first contact.</li>
+          <li>Send it back to us once a year for a complimentary polish on the felt wheel.</li>
+        </ul>
+      </div></div>
+    </div>
+  `;
+  document.querySelectorAll('.acc-trigger').forEach(t => {
+    t.addEventListener('click', () => {
+      const item = t.closest('.acc-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Related
+  const related = PRODUCTS.filter(x => x.category === p.category && x.id !== p.id).slice(0, 4);
+  // pad if fewer than 4
+  if (related.length < 4) {
+    PRODUCTS.filter(x => x.id !== p.id && !related.includes(x)).slice(0, 4 - related.length).forEach(x => related.push(x));
+  }
+  document.getElementById('related-grid').innerHTML = related.map(x => productCard(x)).join('');
+
+  function generateDesc(p) {
+    const map = {
+      'p01': {
+        short: 'A single brilliant-cut diamond, set low, on a hand-finished 14k band. Worn on a Tuesday. Inherited on a Sunday.',
+        long1: 'The Solitaire is the piece we wished we had been given — and refused to wait for. A 0.5ct brilliant, six-prong, set low enough to read as quiet from across a room.',
+        long2: 'Polished by hand on a felt wheel. Numbered by edition. The kind of ring that doesn\u2019t announce itself, and somehow gets noticed anyway.'
+      },
+      'p02': {
+        short: 'Solid 18k hoops at the weight you forget you\u2019re wearing. The pair you sleep in.',
+        long1: 'Tuesday Hoops are the hoops we wear to everything: the gym, the dinner, the office, the airport. 18k solid, hollow-formed, weight balanced for the lobe.',
+        long2: 'They don\u2019t catch on a hairbrush. They don\u2019t turn green. They go from morning espresso to last call without a thought.'
+      },
+      'p03': {
+        short: 'Hand-engraved black onyx, set in 14k. The signet, reframed — for her, and only her.',
+        long1: 'A flat-top onyx signet, hand-engraved on request. Initials, a date, a single word. Press it into wax, or wear it to dinner.',
+        long2: 'The setting is built up by hand from a solid 14k blank — no cast halves, no glued bezel. Heirloom-grade construction in a piece that fits your everyday.'
+      }
+    };
+    if (map[p.id]) return map[p.id];
+    // generic generator using the meta + name
+    return {
+      short: `${p.name}. ${p.meta}. Hand-finished in Paris. Built quietly, worn often, kept forever.`,
+      long1: `${p.name} sits in our ${p.collection.charAt(0).toUpperCase()+p.collection.slice(1)} edit — designed for the woman who reaches for the same piece on a Tuesday and a Saturday.`,
+      long2: 'Made in solid gold, no plating. Polished by hand on a felt wheel. Numbered, signed, ready to be passed down — or worn into the ground first.'
+    };
+  }
+</script>
+</body>
+</html>

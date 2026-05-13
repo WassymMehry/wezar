@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>It's yours. — Wezar</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .mini-nav {
+    text-align: center; padding: 28px 32px;
+    border-bottom: 1px solid var(--wz-mist); background: var(--wz-bg);
+  }
+  .mini-nav .brand {
+    font-family: var(--wz-font-body); font-weight: 500; letter-spacing: .32em; font-size: 18px;
+  }
+
+  .ty-wrap {
+    max-width: 640px; margin: 0 auto; padding: 128px 24px 96px; text-align: center;
+  }
+  .ty-diamond { color: var(--wz-champagne); font-size: 18px; margin-bottom: 32px; }
+  .ty-wrap .eyebrow { margin-bottom: 24px; }
+  .ty-wrap h1 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(64px, 10vw, 120px); line-height: .95; letter-spacing: 0.08em;
+    margin: 0 0 32px;
+  }
+  .ty-wrap .sub {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: 19px; line-height: 1.55; color: var(--wz-graphite);
+    max-width: 44ch; margin: 0 auto 40px;
+  }
+  .order-num {
+    font-family: var(--wz-font-mono); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--wz-champagne-deep);
+    padding: 12px 0; border-top: 1px solid var(--wz-mist); border-bottom: 1px solid var(--wz-mist);
+    display: inline-block; padding-left: 28px; padding-right: 28px; margin-bottom: 96px;
+  }
+
+  .recap {
+    text-align: left; max-width: 640px; margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+  .recap h2 {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--wz-onyx);
+    margin: 0 0 24px;
+  }
+  .recap-line {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 20px;
+    align-items: center; padding: 18px 0; border-top: 1px solid var(--wz-mist);
+  }
+  .recap-line:last-child { border-bottom: 1px solid var(--wz-mist); }
+  .recap-line .thumb {
+    width: 64px; height: 64px; position: relative; overflow: hidden; background: var(--wz-pearl);
+  }
+  .recap-line .thumb.dark { background: var(--wz-charcoal); }
+  .recap-line .thumb.blush { background: var(--wz-blush); }
+  .recap-line .thumb.deep { background: var(--wz-pearl-deep); }
+  .recap-line .thumb .ph svg { width: 60%; }
+  .recap-line .n { font-family: var(--wz-font-body); text-transform: uppercase; font-size: 18px; margin-bottom: 4px; }
+  .recap-line .m { font-family: var(--wz-font-body); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--wz-stone); }
+  .recap-line .price { font-family: var(--wz-font-body); font-size: 14px; }
+
+  .next-steps {
+    max-width: 720px; margin: 0 auto; padding: 0 24px 96px;
+  }
+  .next-steps h2 {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--wz-onyx);
+    margin: 0 0 32px; text-align: center;
+  }
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  @media (max-width: 700px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    border-top: 1px solid var(--wz-onyx); padding-top: 20px;
+  }
+  .step .num {
+    font-family: var(--wz-font-mono); font-size: 11px; letter-spacing: .22em;
+    color: var(--wz-champagne-deep); margin-bottom: 12px;
+  }
+  .step h3 {
+    font-family: var(--wz-font-body); font-weight: 400; text-transform: uppercase;
+    font-size: 22px; margin: 0 0 12px;
+  }
+  .step p {
+    font-family: var(--wz-font-body); font-size: 13px; line-height: 1.6;
+    color: var(--wz-graphite); margin: 0;
+  }
+
+  .closing-cta {
+    text-align: center; padding: 0 24px 160px;
+  }
+</style>
+</head>
+<body data-screen-label="07 Thank you">
+
+<nav class="mini-nav">
+  <a href="index.html" class="brand">WEZAR</a>
+</nav>
+
+<div class="ty-wrap">
+  <div class="ty-diamond">◆</div>
+  <div class="eyebrow">— Order confirmed</div>
+  <h1>It's <em>yours</em>.</h1>
+  <p class="sub">We're preparing your piece carefully. A confirmation has been sent to your email.</p>
+  <div class="order-num" id="order-num">Order · W-000000</div>
+</div>
+
+<section class="recap">
+  <h2>Your edit</h2>
+  <div id="recap-lines"></div>
+</section>
+
+<section class="next-steps">
+  <h2>What happens next</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="num">01</div>
+      <h3>We confirm.</h3>
+      <p>Within minutes you'll receive an email with the details — and a single image of the piece, photographed in our atelier.</p>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <h3>We craft.</h3>
+      <p>Your piece is finished by hand in 3–5 business days. Polished on a felt wheel. Numbered, signed, packed.</p>
+    </div>
+    <div class="step">
+      <div class="num">03</div>
+      <h3>It arrives.</h3>
+      <p>Free signature delivery, in our pearl box. Tied with a single champagne thread. Yours, on a Tuesday.</p>
+    </div>
+  </div>
+</section>
+
+<div class="closing-cta">
+  <a href="shop.html" class="btn btn-secondary">Continue shopping</a>
+</div>
+
+<div class="footer-mini">
+  <span>© 2026 Wezar</span> <a>Terms</a> <a>Privacy</a> <a>Contact</a>
+</div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script>
+  const order = getQuery('order') || 'W-000000';
+  document.getElementById('order-num').textContent = `Order · ${order}`;
+
+  const itemsRaw = getQuery('items') || '';
+  const items = itemsRaw.split(',').filter(Boolean).map(s => {
+    const [id, qty] = s.split(':');
+    return { id, qty: parseInt(qty, 10) || 1, p: PRODUCTS.find(x => x.id === id) };
+  }).filter(i => i.p);
+
+  if (items.length) {
+    document.getElementById('recap-lines').innerHTML = items.map(i => {
+      const tone = i.p.tone || 'pearl';
+      const toneClass = tone === 'dark' ? 'dark' : tone === 'blush' ? 'blush' : tone === 'deep' ? 'deep' : '';
+      return `
+      <div class="recap-line">
+        <div class="thumb ${toneClass}"><div class="ph">${productArt(i.p)}</div></div>
+        <div>
+          <div class="n">${i.p.name}</div>
+          <div class="m">${i.p.meta} · qty ${i.qty}</div>
+        </div>
+        <div class="price">${fmtPrice(i.p.price * i.qty)}</div>
+      </div>`;
+    }).join('');
+  } else {
+    document.querySelector('.recap').style.display = 'none';
+  }
+</script>
+</body>
+</html>

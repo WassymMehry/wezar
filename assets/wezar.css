@@ -1,0 +1,234 @@
+/* =============================================
+   WEZAR — Colors & Type
+   v1.0 — May 2026
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+:root {
+  /* ---------- COLOR — neutrals ---------- */
+  --wz-onyx:        #0A0A0A;
+  --wz-charcoal:    #1A1A1A;
+  --wz-graphite:    #2C2C2C;
+  --wz-stone:       #8A8A8A;
+  --wz-mist:        #D4D4D4;
+  --wz-pearl-deep:  #EAE2D5;
+  --wz-pearl:       #F4EFE8;
+  --wz-bone:        #FAF7F2;
+  --wz-white:       #FFFFFF;
+
+  /* ---------- COLOR — accent ---------- */
+  --wz-champagne:       #C9A875;
+  --wz-champagne-deep:  #A8895C;
+  --wz-champagne-soft:  #E5D5B5;
+  --wz-blush:           #E8D5C8;
+
+  /* ---------- COLOR — primary brand · Rose d'Amour SL17 ---------- */
+  --wz-rose:           #F0A4B1;  /* SL17 — primary brand surface */
+  --wz-rose-deep:      #D17888;  /* hover, links, accent text on light */
+  --wz-rose-deeper:    #A85563;  /* deep accent, headlines on rose */
+  --wz-rose-soft:      #F8D2D8;  /* secondary surface, card backgrounds */
+  --wz-rose-whisper:   #FCEAED;  /* page background, subtle wash */
+
+  /* ---------- COLOR — signal ---------- */
+  --wz-success: #5C7A5C;
+  --wz-error:   #B85B5B;
+
+  /* ---------- SEMANTIC color tokens ---------- */
+  --wz-bg:           var(--wz-rose-whisper);
+  --wz-bg-alt:       var(--wz-rose-soft);
+  --wz-bg-inverse:   var(--wz-onyx);
+  --wz-fg:           var(--wz-onyx);
+  --wz-fg-muted:     var(--wz-graphite);
+  --wz-fg-subtle:    var(--wz-stone);
+  --wz-fg-inverse:   var(--wz-rose-whisper);
+  --wz-accent:       var(--wz-rose);
+  --wz-accent-deep:  var(--wz-rose-deep);
+  --wz-border:       var(--wz-rose-soft);
+  --wz-border-strong:var(--wz-onyx);
+
+  /* ---------- TYPOGRAPHY families ---------- */
+  --wz-font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --wz-font-body:    'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+  --wz-font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* ---------- TYPE scale ---------- */
+  --wz-text-xs:   0.6875rem;  /* 11 */
+  --wz-text-sm:   0.8125rem;  /* 13 */
+  --wz-text-base: 0.9375rem;  /* 15 */
+  --wz-text-md:   1.0625rem;  /* 17 */
+  --wz-text-lg:   1.375rem;   /* 22 */
+  --wz-text-xl:   1.875rem;   /* 30 */
+  --wz-text-2xl:  2.625rem;   /* 42 */
+  --wz-text-3xl:  3.75rem;    /* 60 */
+  --wz-text-4xl:  5.5rem;     /* 88 */
+
+  --wz-leading-tight:  1.05;
+  --wz-leading-snug:   1.25;
+  --wz-leading-normal: 1.55;
+  --wz-leading-loose:  1.8;
+
+  --wz-tracking-tight:  -0.01em;
+  --wz-tracking-normal:  0;
+  --wz-tracking-wide:    0.08em;
+  --wz-tracking-wider:   0.18em;
+  --wz-tracking-widest:  0.32em;
+
+  /* ---------- SPACING — 4pt scale ---------- */
+  --wz-space-0:  0;
+  --wz-space-1:  4px;
+  --wz-space-2:  8px;
+  --wz-space-3:  12px;
+  --wz-space-4:  16px;
+  --wz-space-5:  24px;
+  --wz-space-6:  32px;
+  --wz-space-7:  48px;
+  --wz-space-8:  64px;
+  --wz-space-9:  96px;
+  --wz-space-10: 128px;
+  --wz-space-11: 192px;
+
+  /* ---------- LAYOUT ---------- */
+  --wz-container:       1320px;
+  --wz-container-text:  720px;
+  --wz-gutter:          24px;
+
+  /* ---------- RADIUS — sharp by default ---------- */
+  --wz-radius-none: 0;
+  --wz-radius-sm:   2px;
+  --wz-radius-md:   4px;
+  --wz-radius-pill: 999px;
+
+  /* ---------- BORDERS ---------- */
+  --wz-border-hair:   1px solid var(--wz-mist);
+  --wz-border-fine:   1px solid var(--wz-onyx);
+  --wz-border-accent: 1px solid var(--wz-champagne);
+
+  /* ---------- SHADOW ---------- */
+  --wz-shadow-soft: 0 1px 2px rgba(10, 10, 10, 0.04);
+  --wz-shadow-card: 0 8px 24px -8px rgba(10, 10, 10, 0.08);
+  --wz-shadow-lift: 0 24px 48px -12px rgba(10, 10, 10, 0.18);
+
+  /* ---------- MOTION ---------- */
+  --wz-ease:     cubic-bezier(0.22, 0.61, 0.36, 1);  /* signature */
+  --wz-ease-in:  cubic-bezier(0.55, 0, 1, 0.45);
+  --wz-ease-out: cubic-bezier(0, 0.55, 0.45, 1);
+  --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart:   cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --spring-soft:      cubic-bezier(0.34, 1.56, 0.64, 1);  /* soft overshoot */
+  --spring-snap:      cubic-bezier(0.5, -0.4, 0.45, 1.4); /* punchier bounce */
+  --wz-dur-fast:      180ms;
+  --wz-dur-base:      320ms;
+  --wz-dur-slow:      560ms;
+  --wz-dur-cinematic: 2000ms;
+
+  /* ---------- Z-INDEX ---------- */
+  --wz-z-base:    1;
+  --wz-z-card:    10;
+  --wz-z-nav:     100;
+  --wz-z-overlay: 1000;
+  --wz-z-modal:   1100;
+  --wz-z-toast:   1200;
+}
+
+/* ===================================================
+   SEMANTIC TYPE CLASSES
+   =================================================== */
+body, .wz-body {
+  font-family: var(--wz-font-body);
+  font-weight: 300;
+  font-size: var(--wz-text-base);
+  line-height: var(--wz-leading-normal);
+  color: var(--wz-fg);
+  background: var(--wz-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wz-display {
+  font-family: var(--wz-font-body);
+  font-weight: 300;
+  font-size: var(--wz-text-4xl);
+  line-height: var(--wz-leading-tight);
+  letter-spacing: var(--wz-tracking-wide);
+  text-transform: uppercase;
+}
+.wz-h1 {
+  font-family: var(--wz-font-body);
+  font-weight: 300;
+  font-size: var(--wz-text-3xl);
+  line-height: var(--wz-leading-tight);
+  letter-spacing: var(--wz-tracking-wide);
+  text-transform: uppercase;
+}
+.wz-h2 {
+  font-family: var(--wz-font-body);
+  font-weight: 300;
+  font-size: var(--wz-text-2xl);
+  line-height: var(--wz-leading-snug);
+  letter-spacing: var(--wz-tracking-wide);
+  text-transform: uppercase;
+}
+.wz-h3 {
+  font-family: var(--wz-font-body);
+  font-weight: 400;
+  font-size: var(--wz-text-xl);
+  line-height: var(--wz-leading-snug);
+  letter-spacing: var(--wz-tracking-wide);
+  text-transform: uppercase;
+}
+.wz-h4 {
+  font-family: var(--wz-font-body);
+  font-weight: 500;
+  font-size: var(--wz-text-lg);
+  letter-spacing: var(--wz-tracking-wide);
+  text-transform: uppercase;
+}
+.wz-eyebrow {
+  font-family: var(--wz-font-body);
+  font-weight: 500;
+  font-size: var(--wz-text-xs);
+  letter-spacing: var(--wz-tracking-widest);
+  text-transform: uppercase;
+  color: var(--wz-rose-deeper);
+}
+.wz-lede {
+  font-family: var(--wz-font-body);
+  font-weight: 300;
+  font-size: var(--wz-text-base);
+  line-height: 1.55;
+  letter-spacing: var(--wz-tracking-wide);
+  text-transform: uppercase;
+}
+.wz-meta {
+  font-family: var(--wz-font-body);
+  font-weight: 400;
+  font-size: var(--wz-text-xs);
+  letter-spacing: var(--wz-tracking-wider);
+  text-transform: uppercase;
+  color: var(--wz-stone);
+}
+.wz-mono {
+  font-family: var(--wz-font-mono);
+  font-size: 0.75rem;
+}
+
+
+/* italic accent helpers — Cormorant inside Jost headlines */
+em, .wz-accent-italic {
+  font-family: var(--wz-font-display);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: inherit;
+}
+.gold, .wz-italic-gold {
+  font-family: var(--wz-font-display);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--wz-champagne-deep);
+}

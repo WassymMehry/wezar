@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collections — Wezar</title>
+<link rel="stylesheet" href="assets/wezar.css">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .intro { padding: 128px 24px 96px; text-align: center; }
+  .intro .eyebrow { margin-bottom: 20px; }
+  .intro h1 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(56px, 9vw, 120px); line-height: .95; letter-spacing: 0.08em;
+    margin: 0 0 32px;
+  }
+  .intro p {
+    max-width: 56ch; margin: 0 auto;
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: 19px; line-height: 1.55; color: var(--wz-graphite);
+  }
+  .intro .diamond { color: var(--wz-champagne); letter-spacing: 1em; font-size: 12px; margin-bottom: 28px; }
+
+  .col-block {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 96px;
+    align-items: center; padding: 96px 0;
+    border-top: 1px solid var(--wz-mist);
+  }
+  .col-block:nth-child(even) .col-img { order: 2; }
+  .col-block:nth-child(even) .col-text { order: 1; }
+  @media (max-width: 900px) {
+    .col-block { grid-template-columns: 1fr; gap: 48px; padding: 64px 0; }
+    .col-block:nth-child(even) .col-img,
+    .col-block:nth-child(even) .col-text { order: initial; }
+  }
+
+  .col-img { aspect-ratio: 4/5; position: relative; overflow: hidden; }
+  .col-img.heirloom  { background: var(--wz-charcoal); }
+  .col-img.everyday  { background: var(--wz-pearl); }
+  .col-img.editorial { background: var(--wz-blush); }
+  .col-img.personal  { background: var(--wz-pearl-deep); }
+  .col-img::after {
+    content: ''; position: absolute; width: 80px; height: 80px; border-radius: 50%;
+    border: 1px solid var(--wz-champagne-deep); top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .col-img.heirloom::after { border-color: var(--wz-champagne); }
+  .col-art { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+  .col-block .ed-num {
+    font-family: var(--wz-font-mono); font-size: 11px; letter-spacing: .18em;
+    color: var(--wz-champagne-deep); margin-bottom: 24px;
+  }
+  .col-block h2 {
+    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
+    font-size: clamp(48px, 6vw, 88px); line-height: 1; letter-spacing: 0.08em;
+    margin: 0 0 8px;
+  }
+  .col-block .tag {
+    font-family: var(--wz-font-body); text-transform: uppercase; font-size: 22px;
+    color: var(--wz-champagne-deep); margin-bottom: 32px;
+  }
+  .col-block p {
+    font-family: var(--wz-font-body); font-weight: 300; font-size: 16px;
+    line-height: 1.7; color: var(--wz-graphite); max-width: 44ch; margin: 0 0 32px;
+  }
+  .col-block .explore {
+    font-family: var(--wz-font-body); font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase;
+    border-bottom: 1px solid var(--wz-onyx); padding-bottom: 4px;
+    transition: all 320ms var(--wz-ease);
+  }
+  .col-block .explore:hover { color: var(--wz-champagne-deep); border-color: var(--wz-champagne-deep); letter-spacing: .26em; }
+
+  .closing { padding: 128px 24px; text-align: center; border-top: 1px solid var(--wz-mist); background: var(--wz-onyx); color: var(--wz-pearl); }
+  .closing .diamond { color: var(--wz-champagne); margin-bottom: 24px; }
+  .closing p {
+    font-family: var(--wz-font-body); text-transform: uppercase; font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.2; max-width: 26ch; margin: 0 auto 32px;
+  }
+</style>
+</head>
+<body data-screen-label="03 Collections">
+
+<div id="site-header"></div>
+
+<section class="intro">
+  <div class="diamond">◆</div>
+  <div class="eyebrow">— Four worlds</div>
+  <h1>Collections.</h1>
+  <p>Every Wezar piece belongs to a world. <em>Heirloom</em> anchors the long game. <em>Everyday</em> lives on the body. <em>Editorial</em> finishes the outfit. <em>Personal</em> speaks only to you.</p>
+</section>
+
+<div class="container" id="col-blocks"></div>
+
+<section class="closing">
+  <div class="diamond">◆</div>
+  <p>Pick a world. Or wear all four — quietly, on a Tuesday.</p>
+  <a href="shop.html" class="btn btn-secondary on-dark">Shop the edit</a>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/motion.js"></script>
+<script>
+  injectChrome('collections');
+
+  const colArtMap = {
+    heirloom:  '<svg viewBox="0 0 200 240" width="55%" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="140" r="56" fill="none" stroke="#C9A875" stroke-width="1.2"/><circle cx="100" cy="78" r="8" fill="#C9A875" fill-opacity=".5"/><path d="M100 70 l-6 12 l6 8 l6 -8 z" fill="none" stroke="#C9A875" stroke-width="1"/></svg>',
+    everyday:  '<svg viewBox="0 0 200 240" width="60%" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="130" rx="76" ry="22" fill="none" stroke="#A8895C" stroke-width="1.2"/><ellipse cx="100" cy="130" rx="58" ry="14" fill="none" stroke="#A8895C" stroke-width="1" stroke-opacity=".5"/></svg>',
+    editorial: '<svg viewBox="0 0 200 240" width="60%" xmlns="http://www.w3.org/2000/svg"><path d="M30 60 Q100 200 170 60" fill="none" stroke="#A8895C" stroke-width="1.2"/><path d="M95 175 l5 12 l5 -12 l-5 -10 z" fill="none" stroke="#A8895C" stroke-width="1"/></svg>',
+    personal:  '<svg viewBox="0 0 200 240" width="50%" xmlns="http://www.w3.org/2000/svg"><rect x="64" y="98" width="72" height="72" rx="2" fill="none" stroke="#A8895C" stroke-width="1.2"/><text x="100" y="148" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="38" fill="#A8895C">w</text></svg>',
+  };
+  const longerDesc = {
+    heirloom: 'Solid 18k. Real stones. Signed editions, individually numbered. Pieces designed to outlive the trends that inspired them — and the lifetimes that wear them first.',
+    everyday: 'Lightweight. Polished. Forgettable in the right way. Hoops you sleep in. Chains you swim in. The pieces you put on in the morning and remember at night.',
+    editorial: 'Statement geometry. Generous gold. Made for the photograph and the room it walks into. Worn to the dinner. Worn to the meeting after.',
+    personal: 'Letters, signets, hand-engraving. Initials. Dates. Words you wouldn\u2019t say out loud. A quiet language, worn close to the throat.',
+  };
+  const numbers = ['01','02','03','04'];
+  document.getElementById('col-blocks').innerHTML = COLLECTIONS.map((c, i) => `
+    <section class="col-block" data-screen-label="${numbers[i]} ${c.name}">
+      <div class="col-img ${c.slug}"><div class="col-art">${colArtMap[c.slug]}</div></div>
+      <div class="col-text">
+        <div class="ed-num">EDITION ${numbers[i]} / 04</div>
+        <h2>${c.name}.</h2>
+        <div class="tag">${c.tagline}</div>
+        <p>${longerDesc[c.slug]}</p>
+        <a class="explore" href="shop.html?collection=${c.slug}">Explore ${c.name.toLowerCase()} →</a>
+      </div>
+    </section>
+  `).join('');
+</script>
+</body>
+</html>
