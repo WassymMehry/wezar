@@ -427,5 +427,6 @@ body::after {
 }
 .card:hover .heart-btn,
 .heart-btn.is-saved { opacity: 1; transform: scale(1); }
+@media (hover: none) { .heart-btn { opacity: 1; transform: scale(1); } }
 .heart-btn.is-saved { color: var(--wz-rose-deep); background: rgba(252,234,237,0.96); }
 .heart-btn svg path { transition: fill 160ms var(--wz-ease); }
