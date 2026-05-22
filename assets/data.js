@@ -151,6 +151,26 @@ function renderFooter() {
   </footer>`;
 }
 
+function renderOverlays() {
+  const svgClose = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  return `
+  <div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+    <button class="search-close" id="search-close" aria-label="Close search">${svgClose}</button>
+    <div class="search-inner">
+      <input class="search-input" id="search-input" type="search" placeholder="Search pieces…" autocomplete="off" spellcheck="false">
+      <ul class="search-results" id="search-results" role="listbox"></ul>
+    </div>
+  </div>
+  <div class="wishlist-drawer" id="wishlist-drawer" role="dialog" aria-modal="true" aria-label="Saved pieces">
+    <div class="wishlist-header">
+      <span class="wishlist-title">SAVED PIECES</span>
+      <button class="wishlist-close" id="wishlist-close" aria-label="Close">${svgClose}</button>
+    </div>
+    <div class="wishlist-body" id="wishlist-body"></div>
+  </div>
+  <div class="overlay-backdrop" id="overlay-backdrop"></div>`;
+}
+
 // ----- DECORATIVE SVG art for product placeholders -----
 function productArt(product) {
   const id = product.id;
