@@ -285,7 +285,7 @@
 <section class="hero" data-screen-label="Hero">
   <div class="hero-img-wrap">
     <video class="hero-img" src="assets/hero.mp4"
-      autoplay muted loop playsinline></video>
+      autoplay muted loop playsinline preload="auto"></video>
   </div>
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="hero-content">
@@ -454,6 +454,13 @@
     animate('.hero-img', { y: ['0%', '-15%'] }),
     { target: document.querySelector('.hero') }
   );
+</script>
+<script>
+  const heroVid = document.querySelector('.hero-img');
+  if (heroVid) {
+    heroVid.play().catch(() => {});
+    document.addEventListener('touchstart', () => heroVid.play().catch(() => {}), { once: true });
+  }
 </script>
 <script>
   injectChrome('home');
