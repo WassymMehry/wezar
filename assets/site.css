@@ -303,16 +303,6 @@ body::after {
   .wz-split-inner { transform: none !important; }
 }
 
-/* ---------- BAG PNG ICON (mask → currentColor) ---------- */
-.nav-bag-icon {
-  display: block; width: 20px; height: 20px;
-  background-color: currentColor;
-  -webkit-mask-image: url('../uploads/Shopping%20Bag.png');
-  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
-  mask-image: url('../uploads/Shopping%20Bag.png');
-  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
-}
-
 /* ---------- SEARCH OVERLAY ---------- */
 .search-overlay {
   position: fixed; inset: 0; z-index: 200;

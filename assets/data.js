@@ -99,6 +99,7 @@ const wishlist = {
 function renderHeader(active) {
   const svgSearch = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>`;
   const svgHeart  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  const svgBag    = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="14" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>`;
   return `
   <nav class="nav" data-screen-label="Header">
     <a href="index.html" class="nav-brand">WEZAR</a>
@@ -111,7 +112,7 @@ function renderHeader(active) {
     <div class="nav-icons">
       <button id="nav-search-btn" aria-label="Search">${svgSearch}</button>
       <button id="nav-wishlist-btn" aria-label="Wishlist">${svgHeart}<span class="nav-wishlist-count" data-wishlist-count style="display:none">0</span></button>
-      <a href="cart.html" aria-label="Bag"><span class="nav-bag-icon" aria-hidden="true"></span><span class="nav-bag-count" data-bag-count style="display:none">0</span></a>
+      <a href="cart.html" aria-label="Bag">${svgBag}<span class="nav-bag-count" data-bag-count style="display:none">0</span></a>
     </div>
   </nav>`;
 }
