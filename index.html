@@ -80,6 +80,16 @@
     50%       { transform: scaleY(.4); opacity: .9; }
   }
 
+  @media (min-width: 768px) {
+    .hero { background: var(--wz-onyx); }
+    .hero-img-wrap {
+      inset: unset;
+      top: 0; bottom: 0;
+      left: 50%; transform: translateX(-50%);
+      width: calc(100vh * 9 / 16);
+    }
+  }
+
   /* ---------- SECTION ---------- */
   .section { padding: 96px 0; }
   .section-tight { padding: 80px 0; }
@@ -274,7 +284,8 @@
 <!-- ============ HERO ============ -->
 <section class="hero" data-screen-label="Hero">
   <div class="hero-img-wrap">
-    <img class="hero-img" src="assets/hero.jpeg" alt="Wezar Spring 2026 Campaign">
+    <video class="hero-img" src="assets/hero.mp4"
+      autoplay muted loop playsinline></video>
   </div>
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="hero-content">
