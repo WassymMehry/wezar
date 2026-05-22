@@ -228,10 +228,108 @@ function getQuery(name) {
   return new URLSearchParams(location.search).get(name);
 }
 
+function renderWishlistBody() {
+  const ids = wishlist.read();
+  if (!ids.length) return `<p class="wishlist-empty">No saved pieces yet.</p>`;
+  const svgHeartFilled = `<svg width="16" height="16" viewBox="0 0 24 24" fill="var(--wz-rose-deep)" stroke="var(--wz-rose-deep)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  return ids.map(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return '';
+    return `
+    <div class="wishlist-item">
+      <a class="wishlist-item-art" href="product.html?id=${p.id}">${productArt(p)}</a>
+      <div class="wishlist-item-info">
+        <a class="wishlist-item-name" href="product.html?id=${p.id}">${p.name}</a>
+        <span class="wishlist-item-meta">${p.collection} · ${fmtPrice(p.price)}</span>
+        <div class="wishlist-item-actions">
+          <button class="wishlist-move-to-bag" data-move-id="${p.id}">Move to bag</button>
+          <button class="wishlist-remove" data-remove-id="${p.id}" aria-label="Remove">${svgHeartFilled}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function initNavInteractions() {
+  const searchBtn      = document.getElementById('nav-search-btn');
+  const wishlistBtn    = document.getElementById('nav-wishlist-btn');
+  const searchOverlay  = document.getElementById('search-overlay');
+  const wishlistDrawer = document.getElementById('wishlist-drawer');
+  const backdrop       = document.getElementById('overlay-backdrop');
+  const searchClose    = document.getElementById('search-close');
+  const wishlistClose  = document.getElementById('wishlist-close');
+  const searchInput    = document.getElementById('search-input');
+  const searchResults  = document.getElementById('search-results');
+  const wishlistBody   = document.getElementById('wishlist-body');
+
+  function openSearch() {
+    searchOverlay.classList.add('is-open');
+    wishlistDrawer.classList.remove('is-open');
+    backdrop.classList.remove('is-visible');
+    setTimeout(() => searchInput.focus(), 50);
+  }
+  function openWishlist() {
+    wishlistDrawer.classList.add('is-open');
+    searchOverlay.classList.remove('is-open');
+    backdrop.classList.add('is-visible');
+    wishlistBody.innerHTML = renderWishlistBody();
+  }
+  function closeAll() {
+    searchOverlay.classList.remove('is-open');
+    wishlistDrawer.classList.remove('is-open');
+    backdrop.classList.remove('is-visible');
+    searchInput.value = '';
+    searchResults.innerHTML = '';
+  }
+
+  searchBtn.addEventListener('click', openSearch);
+  wishlistBtn.addEventListener('click', openWishlist);
+  searchClose.addEventListener('click', closeAll);
+  wishlistClose.addEventListener('click', closeAll);
+  backdrop.addEventListener('click', closeAll);
+
+  searchOverlay.addEventListener('click', e => {
+    if (!e.target.closest('.search-inner')) closeAll();
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (!q) { searchResults.innerHTML = ''; return; }
+    const hits = PRODUCTS.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.collection.toLowerCase().includes(q)
+    );
+    if (!hits.length) {
+      searchResults.innerHTML = `<li class="search-no-results">No pieces found</li>`;
+      return;
+    }
+    searchResults.innerHTML = hits.map(p => `
+      <li class="search-result-item">
+        <a href="product.html?id=${p.id}">
+          <span class="search-result-name">${p.name}</span>
+          <span class="search-result-collection">${p.collection}</span>
+        </a>
+      </li>`).join('');
+  });
+
+  wishlistBody.addEventListener('click', e => {
+    const moveBtn   = e.target.closest('[data-move-id]');
+    const removeBtn = e.target.closest('[data-remove-id]');
+    if (moveBtn)   { cart.add(moveBtn.dataset.moveId); wishlist.toggle(moveBtn.dataset.moveId); wishlistBody.innerHTML = renderWishlistBody(); }
+    if (removeBtn) { wishlist.toggle(removeBtn.dataset.removeId); wishlistBody.innerHTML = renderWishlistBody(); }
+  });
+}
+
 function injectChrome(active) {
   const headerSlot = document.getElementById('site-header');
   if (headerSlot) headerSlot.outerHTML = renderHeader(active);
   const footerSlot = document.getElementById('site-footer');
   if (footerSlot) footerSlot.outerHTML = renderFooter();
+  document.body.insertAdjacentHTML('beforeend', renderOverlays());
+  initNavInteractions();
   cart._notify();
+  wishlist._notify();
 }
