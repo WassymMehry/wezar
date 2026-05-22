@@ -207,16 +207,20 @@ function tonelClass(tone) {
 
 // Render a product card. ctx default is shop link.
 function productCard(p, opts = {}) {
-  const href = `product.html?id=${p.id}`;
-  const tone = p.tone || 'pearl';
+  const href      = `product.html?id=${p.id}`;
+  const tone      = p.tone || 'pearl';
   const toneClass = tone === 'dark' ? 'dark' : tone === 'blush' ? 'blush' : tone === 'deep' ? 'deep' : tone === 'bone' ? 'bone' : '';
-  const tag = p.tag ? `<span class="tag ${p.tag==='New'?'':'gold'}">${p.tag}</span>` : '';
+  const tag       = p.tag ? `<span class="tag ${p.tag==='New'?'':'gold'}">${p.tag}</span>` : '';
+  const saved     = wishlist.has(p.id);
+  const heartFill = saved ? 'var(--wz-rose-deep)' : 'none';
+  const svgHeart  = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${heartFill}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
   return `
     <a class="card" href="${href}" data-category="${p.category}" data-collection="${p.collection}" data-price="${p.price}" data-id="${p.id}">
       <div class="img ${toneClass}">
         ${tag}
         <div class="ph">${productArt(p)}</div>
         <div class="img-overlay"><span>View piece</span></div>
+        <button class="heart-btn${saved?' is-saved':''}" data-heart-id="${p.id}" aria-label="Save to wishlist" onclick="event.preventDefault();wishlist.toggle('${p.id}')">${svgHeart}</button>
       </div>
       <div class="name">${p.name}</div>
       <div class="meta">${p.meta}</div>
