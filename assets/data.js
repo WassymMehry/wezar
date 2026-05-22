@@ -65,6 +65,36 @@ const cart = {
   },
 };
 
+// ----- WISHLIST (localStorage) -----
+const WISHLIST_KEY = 'wezar.wishlist.v1';
+const wishlist = {
+  read() {
+    try { return JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []; } catch(e) { return []; }
+  },
+  write(ids) { localStorage.setItem(WISHLIST_KEY, JSON.stringify(ids)); this._notify(); },
+  has(id) { return this.read().includes(id); },
+  count() { return this.read().length; },
+  toggle(id) {
+    const ids = this.read();
+    const idx = ids.indexOf(id);
+    if (idx === -1) ids.push(id); else ids.splice(idx, 1);
+    this.write(ids);
+  },
+  _notify() {
+    document.querySelectorAll('[data-wishlist-count]').forEach(el => {
+      const n = this.count();
+      el.textContent = n;
+      el.style.display = n > 0 ? 'inline-flex' : 'none';
+    });
+    document.querySelectorAll('[data-heart-id]').forEach(el => {
+      const saved = this.has(el.dataset.heartId);
+      el.classList.toggle('is-saved', saved);
+      const path = el.querySelector('svg path');
+      if (path) path.setAttribute('fill', saved ? 'var(--wz-rose-deep)' : 'none');
+    });
+  },
+};
+
 // ----- HEADER / FOOTER PARTIALS -----
 function renderHeader(active) {
   const svgSearch = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>`;
