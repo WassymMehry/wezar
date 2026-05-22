@@ -69,13 +69,13 @@ const cart = {
 function renderHeader(active) {
   return `
   <nav class="nav" data-screen-label="Header">
+    <a href="index.html" class="nav-brand">WEZAR</a>
     <ul class="nav-links">
       <li><a href="shop.html" class="${active==='shop'?'active':''}">Shop</a></li>
       <li><a href="collections.html" class="${active==='collections'?'active':''}">Collections</a></li>
       <li><a href="shop.html?category=rings">Rings</a></li>
       <li><a href="shop.html?category=earrings">Earrings</a></li>
     </ul>
-    <a href="index.html" class="nav-brand">WEZAR</a>
     <div class="nav-icons">
       <a aria-label="Search">⌕</a>
       <a aria-label="Wishlist">♡</a>
