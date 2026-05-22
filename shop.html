@@ -7,14 +7,6 @@
 <link rel="stylesheet" href="assets/wezar.css">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-  .page-title-block { padding: 96px 0 48px; }
-  .page-title-block .eyebrow { margin-bottom: 16px; }
-  .page-title-block h1 {
-    font-family: var(--wz-font-body); font-weight: 300; text-transform: uppercase;
-    font-size: clamp(56px, 9vw, 120px); line-height: .95; letter-spacing: 0.08em;
-    margin: 0;
-  }
-
   .filter-bar {
     position: sticky; top: 73px; z-index: 50;
     background: var(--wz-bg); border-top: 1px solid var(--wz-mist); border-bottom: 1px solid var(--wz-mist);
@@ -74,13 +66,6 @@
 <body data-screen-label="02 Shop">
 
 <div id="site-header"></div>
-
-<section class="page-title-block">
-  <div class="container">
-    <div class="eyebrow"><span id="count-eb">— 16 pieces</span></div>
-    <h1>The Edit.</h1>
-  </div>
-</section>
 
 <div class="filter-bar">
   <div class="container inner">
@@ -169,7 +154,6 @@
     else if (activeSort === 'price-desc') list.sort((a,b) => b.price - a.price);
     // newest = original order (newest first by data ordering)
 
-    document.getElementById('count-eb').textContent = `— ${list.length} ${list.length===1?'piece':'pieces'}`;
     document.getElementById('grid').innerHTML = list.map(p => productCard(p)).join('');
     document.getElementById('empty').style.display = list.length ? 'none' : 'block';
   }
